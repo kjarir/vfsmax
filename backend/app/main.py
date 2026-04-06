@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from app.core import database, security, config
 from app.api.v1.endpoints import monitoring, auth, bookings
 import structlog
+import os
 
 logger = structlog.get_logger(__name__)
 
@@ -66,7 +67,31 @@ async def background_monitoring_loop():
 @app.on_event("startup")
 async def startup_event():
     logger.info("VFSMAX Backend Starting...")
-    asyncio.create_task(background_monitoring_loop())
+    
+    # Initialize Database on Startup
+    try:
+        models.Base.metadata.create_all(bind=database.engine)
+        db = database.SessionLocal()
+        if db.query(models.MonitoringTarget).count() == 0:
+            logger.info("Seeding initial target countries...")
+            from datetime import datetime
+            countries = [
+                ("Germany", "Visa Appointment", "https://visa.vfsglobal.com/ind/en/deu/login", "Mumbai"),
+                ("France", "Visa Appointment", "https://visa.vfsglobal.com/ind/en/fra/login", "New Delhi"),
+            ]
+            for country, visa_type, portal, center in countries:
+                db.add(models.MonitoringTarget(
+                    country=country, visa_type=visa_type, status="ACTIVE",
+                    config_json={"portal_url": portal, "center": center}
+                ))
+            db.commit()
+        db.close()
+    except Exception as e:
+        logger.error(f"Database initialization failed: {e}")
+
+    # Start background loop only if not on Vercel (serverless doesn't support long-running tasks)
+    if os.getenv("VERCEL") != "1":
+        asyncio.create_task(background_monitoring_loop())
 
 @app.on_event("shutdown")
 async def shutdown_event():

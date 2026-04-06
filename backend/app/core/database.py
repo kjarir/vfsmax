@@ -4,7 +4,10 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 # Use SQLite by default for simplicity (vfsmax.db)
-SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./vfsmax.db")
+if os.getenv("VERCEL") == "1":
+    SQLALCHEMY_DATABASE_URL = "sqlite:////tmp/vfsmax.db"
+else:
+    SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./vfsmax.db")
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL, 
