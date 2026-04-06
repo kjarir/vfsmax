@@ -38,7 +38,7 @@ const MOCK_CHART_DATA = [
   { time: '13:00', checks: 59, slots: 0 },
 ];
 
-const API_BASE_URL = "/api/v1";
+const API_BASE_URL = "/_/backend/api/v1";
 
 export default function App() {
   const [activeTab, setActiveTab] = useState("dashboard");

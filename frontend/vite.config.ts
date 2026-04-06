@@ -7,8 +7,9 @@ export default defineConfig({
   server: {
     port: 3000,
     proxy: {
-      '/api/v1': {
+      '/_/backend/api/v1': {
         target: 'http://127.0.0.1:8010',
+        rewrite: (path) => path.replace(/^\/_\/backend/, ''),
         changeOrigin: true,
       }
     }
