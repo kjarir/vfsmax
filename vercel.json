@@ -9,5 +9,11 @@
       "entrypoint": "backend",
       "routePrefix": "/_/backend"
     }
-  }
+  },
+  "crons": [
+    {
+      "path": "/_/backend/api/v1/monitoring/trigger-all",
+      "schedule": "*/10 * * * *"
+    }
+  ]
 }

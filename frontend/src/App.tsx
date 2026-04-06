@@ -135,6 +135,20 @@ export default function App() {
           </div>
           
           <div className="flex items-center gap-4">
+             <button 
+               onClick={async () => {
+                 try {
+                   await axios.post(`${API_BASE_URL}/monitoring/trigger-all`);
+                   alert("Bot check iteration triggered!");
+                 } catch (e) {
+                   console.error(e);
+                   alert("Failed to manual trigger.");
+                 }
+               }}
+               className="flex items-center gap-2 px-4 py-2 bg-indigo-600/10 text-indigo-400 text-[10px] font-bold rounded-full border border-indigo-600/20 hover:bg-indigo-600 hover:text-white transition-all shadow-lg shadow-indigo-500/10 mr-2"
+             >
+               <Zap size={12} /> RUN BOT ITERATION
+             </button>
              <div className="relative group">
                 <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-blue-400 transition-colors" />
                 <input 
