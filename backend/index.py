@@ -5,4 +5,4 @@ import sys
 sys.path.append(os.path.dirname(__file__))
 
 # Import the FastAPI instance
-from app.main import app as handler
+from app.main import app
