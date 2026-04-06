@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "VFSMAX"
     API_V1_STR: str = "/api/v1"
     
-    JWT_SECRET: str
+    JWT_SECRET: str = "vfsmax_default_secret_change_me"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8  # 8 days
     
     POSTGRES_SERVER: str = "db"
@@ -33,12 +33,12 @@ class Settings(BaseSettings):
             return v
         return f"redis://{values.get('REDIS_HOST')}:6379/0"
 
-    OPENAI_API_KEY: str
+    OPENAI_API_KEY: str = ""
     TWOCAPTCHA_API_KEY: Optional[str] = None
     TELEGRAM_BOT_TOKEN: Optional[str] = None
     TELEGRAM_CHAT_ID: Optional[str] = None
     
-    VFSMAX_ENCRYPTION_KEY: str  # Used for AES-256
+    VFSMAX_ENCRYPTION_KEY: str = "vfsmax_encryption_key_32bytes_exactly" # Used for AES-256
     
     # Stealth Settings
     MAX_CONCURRENT_WORKERS: int = 5
